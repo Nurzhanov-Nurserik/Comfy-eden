@@ -1,0 +1,22 @@
+# OS-мусор
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Редакторы
+.vscode/
+.idea/
+*.swp
+
+# Логи / временное
+*.log
+node_modules/
+
+# Секреты и сборка
+.env
+.env.local
+dist/
+
+# Папку .claude/ НЕ игнорируем — агенты, скиллы и CLAUDE.md едут вместе с проектом
