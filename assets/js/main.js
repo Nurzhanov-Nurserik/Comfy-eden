@@ -10,24 +10,25 @@
 ------------------------------------------------------------ */
 const CONFIG = {
   // WhatsApp менеджера — БЕЗ "+", только цифры. Формат РК: 77XXXXXXXXX
-  whatsappNumber: '77000000000',          // TODO
+  whatsappNumber: '77785817652',
 
-  phoneDisplay: '+7 (700) 000-00-00',     // TODO — как показывать
-  phoneHref:   '+77000000000',            // TODO — для tel: (без пробелов)
+  phoneDisplay: '+7 778 581 76 52',       // показываем (тот же номер, что WhatsApp)
+  phoneHref:   '+77785817652',            // для tel:
 
-  email: 'hello@comfyeden.kz',            // TODO
+  email: '',                              // TODO: рабочий email (личный gmail не публикуем) — пока скрыт
 
-  city: 'Алматы',                         // TODO
+  city: '',                               // TODO: город — пока скрыт
 
-  instagramUrl: 'https://instagram.com/comfyeden',  // TODO
-  instagramHandle: '@comfyeden',                    // TODO
+  instagramUrl: '',                       // TODO: ссылка на Instagram — пока скрыт
+  instagramHandle: '',
 
   // Ссылка на Telegram-бота (каталог + прайс + КП)
-  telegramBotUrl: 'https://t.me/comfyeden_bot',     // TODO
+  telegramBotUrl: '',                     // TODO: ссылка на бота — пока скрыт
 
   // (Опц.) Endpoint, который перешлёт заявку в Telegram-бот/CRM.
   // Если пусто — заявка уходит только в WhatsApp. Пример: serverless-функция или webhook.
-  leadEndpoint: ''                                  // TODO (необязательно)
+  leadEndpoint: ''
+  // Пустые поля выше автоматически скрываются на сайте (см. applyContacts).
 };
 
 const WA_GREETING = 'Здравствуйте! Пишу с сайта Comfy Eden. Хочу узнать про комплектацию текстилем для объекта.';
@@ -48,13 +49,16 @@ function waLink(text) {
    2. Заполнение контактов из CONFIG
 ------------------------------------------------------------ */
 function applyContacts() {
+  const has = v => typeof v === 'string' && v.trim() !== '';
+  const hide = el => { const card = el.closest('.contact'); (card || el).hidden = true; };
+
   const hrefMap = {
-    phone: 'tel:' + CONFIG.phoneHref,
-    whatsapp: waLink(WA_GREETING),
-    'whatsapp-float': waLink(WA_GREETING),
-    email: 'mailto:' + CONFIG.email,
-    telegram: CONFIG.telegramBotUrl,
-    instagram: CONFIG.instagramUrl
+    phone: has(CONFIG.phoneHref) ? 'tel:' + CONFIG.phoneHref : '',
+    whatsapp: has(CONFIG.whatsappNumber) ? waLink(WA_GREETING) : '',
+    'whatsapp-float': has(CONFIG.whatsappNumber) ? waLink(WA_GREETING) : '',
+    email: has(CONFIG.email) ? 'mailto:' + CONFIG.email : '',
+    telegram: has(CONFIG.telegramBotUrl) ? CONFIG.telegramBotUrl : '',
+    instagram: has(CONFIG.instagramUrl) ? CONFIG.instagramUrl : ''
   };
   const external = new Set(['whatsapp', 'whatsapp-float', 'telegram', 'instagram']);
 
@@ -64,6 +68,8 @@ function applyContacts() {
     if (href && el.tagName === 'A') {
       el.setAttribute('href', href);
       if (external.has(type)) { el.target = '_blank'; el.rel = 'noopener'; }
+    } else if (!href) {
+      hide(el); // нет данных для канала — прячем ссылку/карточку
     }
   });
 
@@ -75,7 +81,9 @@ function applyContacts() {
   };
   $$('[data-contact-text]').forEach(el => {
     const key = el.getAttribute('data-contact-text');
-    if (textMap[key]) el.textContent = textMap[key];
+    if (!(key in textMap)) return; // whatsapp/telegram — статический текст; их видимость решает href-цикл
+    if (has(textMap[key])) el.textContent = textMap[key];
+    else hide(el);
   });
 
   const year = $('[data-year]');
