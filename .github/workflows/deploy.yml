@@ -1,9 +1,9 @@
 name: Deploy site
 
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:        # ручной запуск из вкладки Actions
+  workflow_dispatch:        # только ручной запуск; авто-деплой делает Netlify (репозиторий приватный)
+  # push:                   # включи обратно, если перейдёшь на публичный репо + GitHub Pages
+  #   branches: [ main ]
 
 permissions:
   contents: read
