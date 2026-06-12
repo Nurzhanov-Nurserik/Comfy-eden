@@ -626,6 +626,12 @@ ul, ol { list-style: none; padding: 0; }
   gap: clamp(32px, 5vw, 64px);
   align-items: start;
 }
+/* mobile overflow fix: длинные <option> в select не должны распирать сетку формы */
+.lead__inner,
+.lead__intro,
+.lead-form,
+.field-row,
+.field { min-width: 0; }
 .lead__intro { position: sticky; top: calc(var(--header-h) + 28px); }
 .lead__points { margin-top: 26px; display: flex; flex-direction: column; gap: 14px; }
 .lead__points li { display: flex; gap: 12px; align-items: flex-start; color: var(--ink-2); font-weight: 600; }
@@ -647,6 +653,7 @@ ul, ol { list-style: none; padding: 0; }
 .req { color: var(--accent); }
 .field input, .field select {
   font: inherit;
+  min-width: 0;
   padding: 13px 14px;
   border: 1px solid var(--line-2);
   border-radius: var(--r-sm);
