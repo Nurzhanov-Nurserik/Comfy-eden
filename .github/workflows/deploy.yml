@@ -1,0 +1,70 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:        # ручной запуск из вкладки Actions
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  # Ворота качества: тест + секреты. Деплой только если прошло.
+  checks:
+    name: Тест и проверка секретов
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Синтаксис JS (node --check)
+        run: |
+          set -e
+          for f in $(git ls-files '*.js'); do echo "check: $f"; node --check "$f"; done
+
+      - name: Проверка секретов
+        run: |
+          RE=$'(-----BEGIN [A-Z ]*PRIVATE KEY-----|AKIA[0-9A-Z]{16}|xox[baprs]-[0-9A-Za-z-]{10,}|gh[pousr]_[0-9A-Za-z]{30,}|[0-9]{8,10}:[A-Za-z0-9_-]{35}|(password|passwd|secret|api[_-]?key|access[_-]?token|client[_-]?secret|private[_-]?key)[\x22\x27]?[[:space:]]*[:=][[:space:]]*[\x22\x27][^\x22\x27]{6,})'
+          if grep -rEnI "$RE" --exclude-dir=.git --exclude-dir=.github --exclude-dir=.githooks .; then
+            echo "::error::Найдены возможные секреты — деплой остановлен"; exit 1
+          fi
+          echo "Секреты не найдены ✓"
+
+      - name: Контакты-заглушки (предупреждение)
+        run: |
+          if grep -q "77000000000" assets/js/main.js 2>/dev/null; then
+            echo "::warning::CONFIG ещё с заглушками контактов (77000000000) — сайт выйдет с плейсхолдерами"
+          fi
+
+  deploy:
+    name: Деплой на GitHub Pages
+    needs: checks
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Собрать публичную папку (только сайт, без документов)
+        run: |
+          mkdir -p _site
+          cp index.html _site/
+          cp -r assets _site/
+          touch _site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

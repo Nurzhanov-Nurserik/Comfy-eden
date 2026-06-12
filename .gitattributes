@@ -1,0 +1,11 @@
+# Скрипты и git-хуки — всегда LF (иначе bash не запустит их на Windows)
+.githooks/** text eol=lf
+*.sh        text eol=lf
+
+# Бинарные ассеты — без нормализации переносов строк
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.ico   binary
+*.woff2 binary

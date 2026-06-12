@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+#
+# Pre-commit для Comfy Eden:
+#   1) блокирует файлы-секреты (.env, ключи)
+#   2) ищет секреты в содержимом (пароли, токены, приватные ключи)
+#   3) тест: синтаксис JS (node --check)
+#   4) код-ревью: предупреждает про console.log/debugger
+#
+# Обход (НЕ рекомендуется): git commit --no-verify
+#
+set -u
+
+red() { printf '\033[31m%s\033[0m\n' "$1"; }
+ylw() { printf '\033[33m%s\033[0m\n' "$1"; }
+grn() { printf '\033[32m%s\033[0m\n' "$1"; }
+
+fail=0
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$staged" ] && exit 0
+
+# 1) Файлы-секреты по имени — никогда не коммитим
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  case "$f" in
+    .env|.env.*|*/.env|*/.env.*|*.pem|*.key|*.p12|*.pfx|*id_rsa*)
+      red "✗ Секретный файл не должен попадать в git: $f"; fail=1 ;;
+  esac
+done <<EOF
+$staged
+EOF
+
+# 2) Секретные паттерны в содержимом (\x22 = ", \x27 = ')
+RE=$'(-----BEGIN [A-Z ]*PRIVATE KEY-----|AKIA[0-9A-Z]{16}|xox[baprs]-[0-9A-Za-z-]{10,}|gh[pousr]_[0-9A-Za-z]{30,}|[0-9]{8,10}:[A-Za-z0-9_-]{35}|(password|passwd|secret|api[_-]?key|access[_-]?token|client[_-]?secret|private[_-]?key)[\x22\x27]?[[:space:]]*[:=][[:space:]]*[\x22\x27][^\x22\x27]{6,})'
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  case "$f" in .githooks/*|.github/*) continue ;; esac
+  [ -f "$f" ] || continue
+  if git show ":$f" 2>/dev/null | grep -EnI "$RE" >/dev/null 2>&1; then
+    red "✗ Похоже на секрет в $f:"
+    git show ":$f" | grep -EnI "$RE" | head -3 | sed 's/^/    /'
+    fail=1
+  fi
+done <<EOF
+$staged
+EOF
+
+# 3) Тест: синтаксис JS
+if command -v node >/dev/null 2>&1; then
+  while IFS= read -r f; do
+    case "$f" in
+      *.js)
+        [ -f "$f" ] || continue
+        if ! err=$(node --check "$f" 2>&1); then
+          red "✗ Ошибка синтаксиса JS: $f"; printf '    %s\n' "$err"; fail=1
+        fi ;;
+    esac
+  done <<EOF
+$staged
+EOF
+else
+  ylw "⚠ node не найден — пропускаю проверку синтаксиса JS"
+fi
+
+# 4) Код-ревью (мягкие предупреждения, не блокируют коммит)
+while IFS= read -r f; do
+  case "$f" in
+    *.js)
+      [ -f "$f" ] || continue
+      if grep -nE 'console\.(log|debug)|debugger' "$f" >/dev/null 2>&1; then
+        ylw "⚠ $f: остались console.log/debugger — проверьте перед релизом"
+      fi ;;
+  esac
+done <<EOF
+$staged
+EOF
+
+if [ "$fail" -ne 0 ]; then
+  red "Коммит остановлен pre-commit проверкой. Исправьте проблемы выше."
+  exit 1
+fi
+grn "✓ pre-commit: секреты не найдены, JS валиден."
+exit 0
