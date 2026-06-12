@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6f1e9"/>
+      <stop offset="1" stop-color="#e7ddca"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#efe7d6"/>
+      <stop offset="1" stop-color="#d9ccaf"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- правая композиция: слоистые карточки + бейдж -->
+  <g transform="translate(800,128)">
+    <rect x="20" y="60" width="290" height="380" rx="24" fill="url(#card)" transform="rotate(-6 165 250)" opacity=".88" stroke="#ffffff" stroke-opacity=".5"/>
+    <rect x="70" y="20" width="290" height="380" rx="24" fill="url(#card)" transform="rotate(5 215 210)" stroke="#ffffff" stroke-opacity=".6"/>
+    <rect x="150" y="300" width="150" height="52" rx="26" fill="#ffffff" opacity=".85"/>
+    <text x="176" y="333" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#b08a40">Премиум</text>
+  </g>
+  <g transform="translate(1006,392)">
+    <rect width="150" height="92" rx="18" fill="#1c6b51"/>
+    <text x="20" y="64" font-family="Georgia, serif" font-size="52" font-weight="700" fill="#ffffff">3</text>
+    <text x="64" y="44" font-family="Arial, sans-serif" font-size="17" fill="#e7f0ea">уровня</text>
+    <text x="64" y="68" font-family="Arial, sans-serif" font-size="17" fill="#e7f0ea">качества</text>
+  </g>
+
+  <!-- логотип -->
+  <g transform="translate(90,84)">
+    <rect width="58" height="58" rx="15" fill="#1c6b51"/>
+    <path d="M29 13c-9.3 6.6-13.4 13.8-13.4 20.2A13.4 13.4 0 0 0 29 45.6a13.4 13.4 0 0 0 13.4-12.4C42.4 26.8 38.3 19.6 29 13Z" fill="none" stroke="#f6f1e9" stroke-width="2.7"/>
+    <path d="M29 19v22" stroke="#f6f1e9" stroke-width="2.7"/>
+  </g>
+  <text x="166" y="113" font-family="Georgia, 'Times New Roman', serif" font-size="40" font-weight="600" fill="#1b2a23">Comfy Eden</text>
+  <text x="166" y="138" font-family="Arial, sans-serif" font-size="16" letter-spacing="3" fill="#6f6a5d">HORECA ТЕКСТИЛЬ</text>
+
+  <!-- заголовок -->
+  <text x="90" y="270" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="600" fill="#1b2a23">Гостиничный текстиль</text>
+  <text x="90" y="344" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="600" fill="#1c6b51">для вашего объекта</text>
+
+  <text x="92" y="404" font-family="Arial, sans-serif" font-size="27" fill="#5c5a4e">Постельное · полотенца · халаты · тапочки · одноразовое</text>
+
+  <!-- чипы уровней -->
+  <g font-family="Arial, sans-serif" font-size="22" font-weight="700">
+    <g transform="translate(92,440)">
+      <rect width="148" height="48" rx="24" fill="#efe7d6" stroke="#cfc3a8"/>
+      <text x="32" y="31" fill="#6b5d3e">Эконом</text>
+    </g>
+    <g transform="translate(256,440)">
+      <rect width="160" height="48" rx="24" fill="#e7f0ea" stroke="#9bc3b2"/>
+      <text x="36" y="31" fill="#13503c">Стандарт</text>
+    </g>
+    <g transform="translate(432,440)">
+      <rect width="150" height="48" rx="24" fill="#efe7d6" stroke="#d8be8a"/>
+      <text x="36" y="31" fill="#b08a40">Премиум</text>
+    </g>
+  </g>
+
+  <text x="92" y="560" font-family="Arial, sans-serif" font-size="24" fill="#5c5a4e">Комплектация под ключ · Поставки по Казахстану</text>
+</svg>
