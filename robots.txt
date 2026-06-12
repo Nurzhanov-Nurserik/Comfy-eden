@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nurzhanov-nurserik.github.io/Comfy-eden/sitemap.xml
