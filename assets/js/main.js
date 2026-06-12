@@ -343,6 +343,29 @@ function initLeadForm() {
 }
 
 /* ------------------------------------------------------------
+   8. Лёгкий parallax hero-карточек (премиум-глубина)
+------------------------------------------------------------ */
+function initParallax() {
+  if (prefersReduced) return;
+  const layers = [
+    [$('.hero__card--back'), 0.05],
+    [$('.hero__card--mid'), -0.03],
+    [$('.hero__card--front'), 0.08]
+  ].filter(pair => pair[0]);
+  if (!layers.length) return;
+  let ticking = false;
+  const update = () => {
+    const y = window.scrollY;
+    layers.forEach(([el, rate]) => el.style.setProperty('--py', (y * rate).toFixed(1) + 'px'));
+    ticking = false;
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  update();
+}
+
+/* ------------------------------------------------------------
    Init
 ------------------------------------------------------------ */
 document.addEventListener('DOMContentLoaded', () => {
@@ -351,5 +374,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initReveal();
   initStory();
+  initParallax();
   initLeadForm();
 });

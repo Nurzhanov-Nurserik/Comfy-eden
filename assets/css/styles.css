@@ -355,9 +355,9 @@ ul, ol { list-style: none; padding: 0; }
   box-shadow: var(--shadow-lg);
   border: 1px solid rgba(255, 255, 255, .5);
 }
-.hero__card--back  { inset: 4% 14% 30% 6%; transform: rotate(-6deg); opacity: .92; }
-.hero__card--mid   { inset: 18% 4% 14% 24%; transform: rotate(4deg); }
-.hero__card--front { inset: 30% 18% 4% 10%; display: flex; align-items: flex-end; padding: 18px; }
+.hero__card--back  { inset: 4% 14% 30% 6%; transform: rotate(-6deg) translateY(var(--py, 0px)); opacity: .92; }
+.hero__card--mid   { inset: 18% 4% 14% 24%; transform: rotate(4deg) translateY(var(--py, 0px)); }
+.hero__card--front { inset: 30% 18% 4% 10%; display: flex; align-items: flex-end; padding: 18px; transform: translateY(var(--py, 0px)); }
 .hero__chip {
   position: absolute; top: 14px; left: 14px;
   font-size: .74rem; font-weight: 800; letter-spacing: .04em;
@@ -881,3 +881,73 @@ a.contact:hover { transform: translateY(-3px); box-shadow: var(--shadow); border
 .legal .todo { color: var(--gold); font-weight: 600; }
 
 .legal-foot { border-top: 1px solid var(--line); padding-block: 28px; color: var(--muted); font-size: .88rem; }
+
+/* ============================================================
+   PREMIUM MOTION & POLISH  (ui-ux-pro-max pass)
+   transform/opacity only · 150–400ms · ease-out на вход · reduced-motion-safe
+   ============================================================ */
+:root {
+  --ease-out: cubic-bezier(.22, 1, .36, 1);     /* expo-out — премиальный «доезд» */
+  --ease-spring: cubic-bezier(.34, 1.42, .5, 1); /* лёгкий overshoot, дозированно */
+  --dur-fast: .18s;
+  --dur: .26s;
+  --dur-slow: .72s;
+  --shadow-hover: 0 28px 54px -22px rgba(33, 44, 30, .42);
+}
+
+/* — Reveal: премиальное easing + микро-scale для глубины — */
+[data-reveal] {
+  transform: translateY(26px) scale(.985);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+[data-reveal].is-visible { transform: none; }
+[data-reveal-delay="1"] { transition-delay: .07s; }
+[data-reveal-delay="2"] { transition-delay: .14s; }
+[data-reveal-delay="3"] { transition-delay: .21s; }
+
+/* — Кнопки: премиальный hover-блик + press-scale (feedback) — */
+.btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out),
+              background var(--dur) var(--ease-out), color var(--dur) var(--ease-out),
+              border-color var(--dur) var(--ease-out);
+}
+.btn::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 32%, rgba(255, 255, 255, .28) 50%, transparent 68%);
+  transform: translateX(-130%);
+  transition: transform .6s var(--ease-out);
+  pointer-events: none;
+}
+.btn:hover::after { transform: translateX(130%); }
+.btn--ghost::after, .btn--ghost-light::after {
+  background: linear-gradient(110deg, transparent 32%, rgba(28, 107, 81, .12) 50%, transparent 68%);
+}
+.btn:active { transform: translateY(0) scale(.97); }
+
+/* — Карточки и поверхности: глубже, мягче, единый ритм — */
+.card, .level, .process__step, .feature__icon, .contact {
+  transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out),
+              border-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+}
+.card:hover, .process__step:hover, .level:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+a.contact:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+.card:hover .card__icon { transform: scale(1.06) rotate(-2deg); }
+.card__icon { transition: transform var(--dur) var(--ease-spring); }
+.feature:hover .feature__icon { transform: translateY(-3px); box-shadow: 0 14px 24px -10px rgba(28, 107, 81, .42); color: var(--accent-deep); }
+
+/* — Фокус: премиальное кольцо (видимое, мягкое) — */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; box-shadow: 0 0 0 5px rgba(28, 107, 81, .14); }
+
+/* — Sticky-сторителлинг: активный шаг чуть «выдвигается» — */
+.story__step { transition: opacity .5s var(--ease-out), transform .5s var(--ease-out); }
+.story__step:not(.is-active) { transform: translateX(-3px); }
+.story__step.is-active { transform: none; }
+
+/* — Hero: бейдж реагирует, header мягче — */
+.hero__badge { transition: transform var(--dur) var(--ease-spring), box-shadow var(--dur) var(--ease-out); }
+.hero__art:hover .hero__badge { transform: translateY(-3px) scale(1.03); }
+.hero__card, .hero__badge { will-change: transform; }
+.header { transition: border-color .4s var(--ease-out), box-shadow .4s var(--ease-out), background .4s var(--ease-out); }
