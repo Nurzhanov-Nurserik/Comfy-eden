@@ -38,10 +38,10 @@ Premium B2B-лендинг гостиничного текстиля и одно
 - **Скиллы (команды):** `/qa-review` `/write-section` `/add-section` `/add-product` `/update-contacts` `/connect-photo` `/deploy` `/generate-kp` `/bot-spec` `/seo-pass` `/localize-section`.
 
 ## Git, CI и деплой
-- Репозиторий: `https://github.com/Nurzhanov-Nurserik/Comfy-eden` (приватный; для публикации через GitHub Pages нужно сделать публичным).
+- Репозиторий: `https://github.com/Nurzhanov-Nurserik/Comfy-eden` (**публичный**). Сайт опубликован: **https://nurzhanov-nurserik.github.io/Comfy-eden/** (Pages, Source = GitHub Actions).
 - **Pre-commit хук** (`.githooks/`, через `core.hooksPath`): блок секретов + `node --check` + предупреждения. На новой машине включить: `git config core.hooksPath .githooks`.
 - **Деплой:** GitHub Actions (`.github/workflows/deploy.yml`) на push в `main` → Pages; на прод уходит только `index.html`, `privacy.html`, `robots.txt`, `sitemap.xml`, `assets/`.
 - Контакты — только в `CONFIG` (`main.js`). Секреты (токен бота и т.п.) — в `.env`, не коммитим.
 
 ## Статус сейчас
-Сайт готов, проверен (QA), SEO-ready. Контакты: WhatsApp/телефон `+7 778 581 76 52` живые; email/город/Instagram/бот пустые → авто-скрыты. **Осталось:** опубликовать (2 клика в GitHub: сделать репо публичным + Pages→GitHub Actions) и дать цены для бота. Бот — каркас в `bot/` (aiogram), ждёт цены в `prices.py`.
+Сайт **ОПУБЛИКОВАН** и живой: **https://nurzhanov-nurserik.github.io/Comfy-eden/** (GitHub Pages, авто-деплой на каждый push в `main`). Проверен (QA), SEO-ready. Контакты: WhatsApp/телефон `+7 778 581 76 52` живые; email/город/Instagram/бот пустые → авто-скрыты. **Осталось:** дать цены для бота (`bot/prices.py`); по желанию — дизайн-полировка на vanilla по референсам 21st.dev. Дизайн-скилл `ui-ux-pro-max` установлен (user-level). Бот — каркас в `bot/` (aiogram).
