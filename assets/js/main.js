@@ -241,6 +241,15 @@ function initLeadForm() {
       setError(input, msg);
       if (msg && !firstInvalid) firstInvalid = input;
     });
+    // согласие на обработку персональных данных
+    const consent = form.elements.consent;
+    const consentErr = form.querySelector('.consent-error');
+    if (consent && !consent.checked) {
+      if (consentErr) consentErr.textContent = 'Подтвердите согласие на обработку данных';
+      if (!firstInvalid) firstInvalid = consent;
+    } else if (consentErr) {
+      consentErr.textContent = '';
+    }
     if (firstInvalid) firstInvalid.focus();
     return !firstInvalid;
   }
@@ -252,6 +261,12 @@ function initLeadForm() {
       if (fieldWrap(input).classList.contains('field--invalid')) setError(input, '');
     });
   });
+  if (form.elements.consent) {
+    form.elements.consent.addEventListener('change', () => {
+      const cErr = form.querySelector('.consent-error');
+      if (cErr && form.elements.consent.checked) cErr.textContent = '';
+    });
+  }
 
   function collect() {
     const products = $$('input[name="products"]:checked', form).map(i => i.value);
@@ -283,6 +298,7 @@ function initLeadForm() {
       d.volume && 'Объём/номера: ' + d.volume,
       d.comment && 'Комментарий: ' + d.comment,
       '—',
+      'Согласие на обработку ПДн: да',
       'Дата: ' + d.date
     ].filter(Boolean);
     return lines.join('\n');

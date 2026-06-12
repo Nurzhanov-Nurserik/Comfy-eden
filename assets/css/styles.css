@@ -850,3 +850,34 @@ a.contact:hover { transform: translateY(-3px); box-shadow: var(--shadow); border
   .wa-float { transform: none; opacity: 1; }
   .ph::after { display: none; }
 }
+
+/* ============================================================
+   CONSENT (lead form) + LEGAL PAGE (privacy)
+   ============================================================ */
+.consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: .9rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.consent input { width: 18px; height: 18px; accent-color: var(--accent); flex: none; margin-top: 2px; }
+.consent a { color: var(--accent); text-decoration: underline; }
+.consent-error { display: block; }
+
+.legal-top { border-bottom: 1px solid var(--line); background: var(--bg); position: sticky; top: 0; z-index: 50; }
+.legal-top__inner { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); }
+.legal-top__back { font-weight: 600; color: var(--accent); }
+.legal-top__back:hover { color: var(--accent-deep); }
+
+.legal { max-width: 820px; margin-inline: auto; padding: clamp(40px, 6vw, 80px) var(--gutter); }
+.legal h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1.12; color: var(--ink); }
+.legal h2 { font-size: 1.2rem; font-weight: 700; color: var(--ink); margin-top: 1.8em; margin-bottom: .4em; }
+.legal p { color: var(--ink-2); margin-bottom: .6em; }
+.legal a { color: var(--accent); text-decoration: underline; }
+.legal .muted { color: var(--muted); font-size: .9rem; }
+.legal .todo { color: var(--gold); font-weight: 600; }
+
+.legal-foot { border-top: 1px solid var(--line); padding-block: 28px; color: var(--muted); font-size: .88rem; }
