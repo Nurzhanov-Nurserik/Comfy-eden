@@ -10,11 +10,14 @@ Premium B2B-лендинг гостиничного текстиля и одно
 - Запуск: открыть `index.html` или `python -m http.server 5500`.
 
 ## Структура
-- `index.html` — все секции
+- `index.html` — все секции (+ JSON-LD, OG-теги)
+- `privacy.html` — политика конфиденциальности (форма требует согласия)
 - `assets/css/styles.css` — стили, палитра, motion
-- `assets/js/main.js` — `CONFIG` (контакты) + motion + sticky-storytelling + форма→WhatsApp
-- `assets/img/` — фото (слоты под реальные фото)
-- Документы: `SPEC.md` (что) · `PLAN.md` (фазы) · `TASK.md` (бэклог) · `README.md` (запуск/публикация)
+- `assets/js/main.js` — `CONFIG` (контакты) + motion + sticky-storytelling + форма→WhatsApp; пустые контакты авто-скрываются
+- `assets/img/og.svg` — превью для соцсетей
+- `robots.txt`, `sitemap.xml` — SEO
+- `bot/` — Telegram-бот (отдельный компонент, в git-репо сайта **игнорируется**)
+- Документы (**локально, в .gitignore, не публикуются**): `SPEC.md` · `PLAN.md` · `TASK.md` · `BOT_SPEC.md` · публичный `README.md`
 
 ## Правила (важно для ЛЮБОЙ правки)
 - **Цены на сайте не публикуем.** Прайс/КП — только через Telegram-бот после имени+телефона (SPEC §8.5).
@@ -34,5 +37,11 @@ Premium B2B-лендинг гостиничного текстиля и одно
 - **Агенты (роли):** `design-qa`, `ru-copywriter`, `frontend-dev`, `telegram-bot-dev`, `seo-kz`, `kz-localizer`.
 - **Скиллы (команды):** `/qa-review` `/write-section` `/add-section` `/add-product` `/update-contacts` `/connect-photo` `/deploy` `/generate-kp` `/bot-spec` `/seo-pass` `/localize-section`.
 
+## Git, CI и деплой
+- Репозиторий: `https://github.com/Nurzhanov-Nurserik/Comfy-eden` (приватный; для публикации через GitHub Pages нужно сделать публичным).
+- **Pre-commit хук** (`.githooks/`, через `core.hooksPath`): блок секретов + `node --check` + предупреждения. На новой машине включить: `git config core.hooksPath .githooks`.
+- **Деплой:** GitHub Actions (`.github/workflows/deploy.yml`) на push в `main` → Pages; на прод уходит только `index.html`, `privacy.html`, `robots.txt`, `sitemap.xml`, `assets/`.
+- Контакты — только в `CONFIG` (`main.js`). Секреты (токен бота и т.п.) — в `.env`, не коммитим.
+
 ## Статус сейчас
-MVP собран (~90%). Блокер выхода — реальные контакты в `CONFIG` (TASK B1) → используй `/update-contacts`. Дальше: приёмка `/qa-review` → деплой `/deploy`. Бот и SEO/KZ — отдельные фазы.
+Сайт готов, проверен (QA), SEO-ready. Контакты: WhatsApp/телефон `+7 778 581 76 52` живые; email/город/Instagram/бот пустые → авто-скрыты. **Осталось:** опубликовать (2 клика в GitHub: сделать репо публичным + Pages→GitHub Actions) и дать цены для бота. Бот — каркас в `bot/` (aiogram), ждёт цены в `prices.py`.
