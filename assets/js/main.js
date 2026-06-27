@@ -15,12 +15,12 @@ const CONFIG = {
   phoneDisplay: '+7 778 581 76 52',       // показываем (тот же номер, что WhatsApp)
   phoneHref:   '+77785817652',            // для tel:
 
-  email: '',                              // TODO: рабочий email (личный gmail не публикуем) — пока скрыт
+  email: 'comfyeden.kz@gmail.com',
 
-  city: '',                               // TODO: город — пока скрыт
+  city: 'Шымкент',
 
-  instagramUrl: '',                       // TODO: ссылка на Instagram — пока скрыт
-  instagramHandle: '',
+  instagramUrl: 'https://instagram.com/comfy.eden',
+  instagramHandle: '@comfy.eden',
 
   // Ссылка на Telegram-бота (каталог + прайс + КП)
   telegramBotUrl: '',                     // TODO: ссылка на бота — пока скрыт
